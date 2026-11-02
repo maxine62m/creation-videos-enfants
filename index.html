@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Studio Comptines</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<header>
+  <h1>🎬 Studio Comptines</h1>
+  <p class="sub">Prototype v0.1 — 100 % gratuit, tout tourne dans Safari</p>
+</header>
+
+<main>
+  <section class="stage-wrap">
+    <canvas id="stage"></canvas>
+    <div class="stage-bar">
+      <select id="format">
+        <option value="vertical">📱 Shorts / TikTok (9:16)</option>
+        <option value="horizontal">🖥️ YouTube classique (16:9)</option>
+      </select>
+      <button id="btn-play">▶️ Aperçu</button>
+      <button id="btn-record" class="primary">⏺️ Créer la vidéo</button>
+      <button id="btn-stop" hidden>⏹️ Arrêter</button>
+    </div>
+    <p id="status" class="status"></p>
+    <div id="result" hidden>
+      <video id="result-video" controls playsinline></video>
+      <div class="row">
+        <a id="btn-download" class="button primary" download>💾 Télécharger</a>
+        <button id="btn-share">📤 Partager (YouTube, TikTok…)</button>
+      </div>
+    </div>
+  </section>
+
+  <nav class="tabs">
+    <button data-tab="perso" class="active">1. Personnage</button>
+    <button data-tab="histoire">2. Comptine</button>
+    <button data-tab="son">3. Voix &amp; musique</button>
+  </nav>
+
+  <!-- 1. PERSONNAGE -->
+  <section id="tab-perso" class="panel">
+    <div class="grid">
+      <label>Nom <input id="c-nom" maxlength="20"></label>
+      <label>Pronom
+        <select id="c-pronom"><option value="il">il</option><option value="elle">elle</option></select>
+      </label>
+      <label>Espèce
+        <select id="c-espece">
+          <option value="ours">Ourson</option>
+          <option value="lapin">Lapin</option>
+          <option value="chat">Chaton</option>
+        </select>
+      </label>
+      <label>Accessoire
+        <select id="c-accessoire">
+          <option value="noeud">Nœud</option>
+          <option value="chapeau">Chapeau</option>
+          <option value="echarpe">Écharpe</option>
+          <option value="aucun">Aucun</option>
+        </select>
+      </label>
+      <label>Couleur <input type="color" id="c-couleur"></label>
+      <label>Ventre <input type="color" id="c-ventre"></label>
+      <label>Nez <input type="color" id="c-nez"></label>
+      <label>Accessoire <input type="color" id="c-acc"></label>
+      <label class="wide">Taille de la tête <input type="range" id="c-tete" min="0.85" max="1.25" step="0.05"></label>
+    </div>
+    <p class="hint">La « fiche personnage » garde son identité visuelle identique d'une vidéo à l'autre.</p>
+    <div class="row">
+      <button id="btn-export-char">💾 Exporter la fiche</button>
+      <label class="button">📂 Importer une fiche<input type="file" id="file-char" accept=".json,application/json" hidden></label>
+    </div>
+  </section>
+
+  <!-- 2. COMPTINE -->
+  <section id="tab-histoire" class="panel" hidden>
+    <div class="grid">
+      <label>Thème
+        <select id="s-theme">
+          <option value="jardin">🌼 Le jardin</option>
+          <option value="pluie">🌧️ La pluie</option>
+          <option value="dodo">🌙 Le dodo</option>
+        </select>
+      </label>
+      <button id="btn-generate" class="primary">✨ Générer une comptine</button>
+    </div>
+    <label class="wide">Titre <input id="s-titre"></label>
+    <label class="wide">Texte (une ligne vide = une nouvelle scène)
+      <textarea id="s-texte" rows="14"></textarea>
+    </label>
+    <p class="hint">Tu peux tout réécrire à la main. Chaque strophe devient une scène de la vidéo.</p>
+  </section>
+
+  <!-- 3. VOIX & MUSIQUE -->
+  <section id="tab-son" class="panel" hidden>
+    <h3>🎤 Voix</h3>
+    <p class="hint">Option A : enregistre-toi en lisant la comptine (c'est cette voix qui sera dans la vidéo).<br>
+    Option B : importe un fichier audio (voix générée ailleurs).<br>
+    La voix de synthèse de l'iPad sert seulement à écouter le texte : Safari ne permet pas de l'enregistrer dans la vidéo.</p>
+    <div class="row">
+      <button id="btn-tts">🔊 Écouter (voix iPad)</button>
+      <button id="btn-mic">🎙️ M'enregistrer</button>
+      <label class="button">📂 Importer un audio<input type="file" id="file-voice" accept="audio/*" hidden></label>
+      <button id="btn-clear-voice">🗑️ Retirer la voix</button>
+    </div>
+    <audio id="voice-preview" controls hidden></audio>
+    <p id="voice-status" class="status"></p>
+
+    <h3>🎵 Musique</h3>
+    <div class="grid">
+      <label>Volume musique <input type="range" id="m-volume" min="0" max="1" step="0.05" value="0.5"></label>
+      <button id="btn-new-melody">🎲 Nouvelle mélodie</button>
+      <button id="btn-music">▶️ Écouter 8 s</button>
+    </div>
+    <p class="hint">Mélodie originale créée par l'app (aucun droit d'auteur). Numéro de mélodie : <b id="m-seed"></b></p>
+  </section>
+</main>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
