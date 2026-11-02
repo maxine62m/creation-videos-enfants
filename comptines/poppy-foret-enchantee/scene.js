@@ -146,6 +146,7 @@ for (let z = -14; z < 44; z += 1.8) {
 }
 
 // Champignons lumineux
+const champignons = [];
 const teintes = [0xff6fbf, 0x5ff0ff, 0xb48cff, 0xffc75f];
 function champignon(x, z, s, c) {
   const g = new THREE.Group();
@@ -158,6 +159,7 @@ function champignon(x, z, s, c) {
   }
   g.position.set(x, 0, z);
   g.rotation.z = entre(-0.15, 0.15);
+  champignons.push(g);
   scene.add(g);
 }
 for (let z = -10; z < 42; z += entre(1.2, 2.2)) {
@@ -430,6 +432,8 @@ function placerCamera(t) {
   }
   camera.position.copy(pos);
   camera.lookAt(regard);
+  // Rien ne doit boucher la vue : on cache les champignons collés à la caméra
+  for (const c of champignons) c.visible = c.position.distanceTo(pos) > 2.2;
 }
 
 // ---------- textes (titre + sous-titres karaoké) ----------
